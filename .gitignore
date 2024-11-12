@@ -1,0 +1,104 @@
+# Ignore Visual Studio temporary files, build results, and
+# other files that shouldn't be pushed to source control.
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# User-specific files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Mono Auto Generated Files
+mono_crash.*
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# IDE configuration files
+.idea/
+.vscode/
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Uncomment if you have a custom tasks file
+# *.tasks
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# SQL Server files
+*.mdf
+*.ldf
+
+# Business Intelligence projects
+*.rdl.data
+*.bim.layout
+*.bim_*.settings
+
+# Local History for JetBrains IDEs
+.idea/localHistory
+
+# npm package files
+node_modules/
+
+# Visual Studio Code files
+.vscode/
+
+# Log files
+*.log
+
+# Windows
+*.stackdump
+
+# Temporary files
+*.tmp
+*.temp
+
+# Backup files
+*.bak
+
+# Azure DevOps
+.vs/
+
+# Rider
+.idea/
+
+# Resharper
+.ReSharper/
+_ReSharper.Caches/
+
+# Ignore build results
+bin/
+obj/
+
+# Keep solution and project files
+!*.sln
+!*.csproj
+!*.fsproj
+!*.vbproj
