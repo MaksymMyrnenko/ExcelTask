@@ -66,24 +66,6 @@ namespace ConsoleApp
                 excelHandler.SaveToExcel(filePath, spreadsheet);
                 Console.WriteLine($"Spreadsheet saved to {filePath}");
             }
-
-            //spreadsheet.SetCell("A1", "10");
-            //spreadsheet.SetCell("A2", "20");
-            //Console.WriteLine($"Cell A1: {spreadsheet.GetCell("A1").GetValue()}");
-            //Console.WriteLine($"Cell A2: {spreadsheet.GetCell("A2").GetValue()}");
-
-            //Console.WriteLine("Cells with values:");
-            //foreach (var cellId in spreadsheet.DisplayCellsList())
-            //{
-            //    Console.WriteLine(cellId);
-            //}
-
-            //Console.WriteLine("Serialized Spreadsheet:");
-            //Console.WriteLine(spreadsheet.Serialize());
-
-            //excelHandler.SaveToExcel("output.xlsx", spreadsheet);
-
-            //Console.WriteLine("Excel file saved successfully.");
         }
     }
 }
