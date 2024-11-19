@@ -35,11 +35,20 @@ namespace ExcelOperations.Library
             var cell = GetCell(cellId);
             if (cell == null)
             {
-                throw new ArgumentException($"Cell {cellId} not found.");
+                return null; // Cell does not exist
             }
 
             // Check if the cell value is a formula
-            return FormulaEvaluator.EvaluateFormula(cell.RawValue, this);
+            if (cell.RawValue.Contains("+") || cell.RawValue.Contains("-") ||
+                cell.RawValue.Contains("*") || cell.RawValue.Contains("/"))
+            {
+                // Evaluate the formula
+                return FormulaEvaluator.EvaluateFormula(cell.RawValue, this);
+            }
+
+            // Return the raw value for non-formulas
+            return cell.RawValue;
         }
+
     }
 }

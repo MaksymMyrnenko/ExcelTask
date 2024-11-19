@@ -9,6 +9,7 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
+            // Set up Dependency Injection
             var serviceProvider = new ServiceCollection()
                 .AddSingleton<Spreadsheet>()
                 .AddSingleton<ExcelHandler>()
@@ -17,9 +18,46 @@ namespace ConsoleApp
             var spreadsheet = serviceProvider.GetService<Spreadsheet>();
             var excelHandler = serviceProvider.GetService<ExcelHandler>();
 
-            var cellIdPattern = new Regex(@"^[A-Z]+[0-9]+$", RegexOptions.IgnoreCase);
+            while (true)
+            {
+                Console.WriteLine("\nMain Menu:");
+                Console.WriteLine("1) Set values");
+                Console.WriteLine("2) Get value from specific cell");
+                Console.WriteLine("3) List all values");
+                Console.WriteLine("4) Save to file");
+                Console.WriteLine("Enter the number of your choice (or type 'exit' to quit):");
 
+                string choice = Console.ReadLine();
+                if (choice?.ToLower() == "exit")
+                {
+                    break;
+                }
+
+                switch (choice)
+                {
+                    case "1":
+                        SetValues(spreadsheet);
+                        break;
+                    case "2":
+                        GetValueFromCell(spreadsheet);
+                        break;
+                    case "3":
+                        ListAllValues(spreadsheet);
+                        break;
+                    case "4":
+                        SaveToFile(excelHandler, spreadsheet);
+                        break;
+                    default:
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        break;
+                }
+            }
+        }
+
+        private static void SetValues(Spreadsheet spreadsheet)
+        {
             Console.WriteLine("Enter cell data (format: CellID=Value), type 'done' to finish:");
+            var cellIdPattern = new Regex(@"^[A-Z]+[0-9]+$", RegexOptions.IgnoreCase);
 
             while (true)
             {
@@ -59,9 +97,54 @@ namespace ConsoleApp
                     Console.WriteLine("Invalid format. Please use 'CellID=Value'.");
                 }
             }
+        }
 
-            // Save as CSV for Excel compatibility
-            Console.Write("Enter file path to save (e.g., output.csv): ");
+        private static void GetValueFromCell(Spreadsheet spreadsheet)
+        {
+            Console.WriteLine("Enter cell IDs to retrieve their values (type 'done' to go back):");
+
+            while (true)
+            {
+                Console.Write("Enter cell ID: ");
+                string cellId = Console.ReadLine();
+
+                if (cellId?.ToLower() == "done")
+                {
+                    break;
+                }
+
+                var value = spreadsheet.EvaluateCell(cellId);
+                if (value != null)
+                {
+                    Console.WriteLine($"Cell {cellId}: {value}");
+                }
+                else
+                {
+                    Console.WriteLine($"Cell {cellId} is empty or does not exist.");
+                }
+            }
+        }
+
+
+        private static void ListAllValues(Spreadsheet spreadsheet)
+        {
+            Console.WriteLine("Listing all cell values (type 'done' to go back):");
+
+            foreach (var cellId in spreadsheet.DisplayCellsList())
+            {
+                // Evaluate the cell to handle formulas
+                var evaluatedValue = spreadsheet.EvaluateCell(cellId);
+                Console.WriteLine($"Cell {cellId}: {evaluatedValue}");
+            }
+
+            Console.WriteLine("Type 'done' to return to the main menu.");
+            while (Console.ReadLine()?.ToLower() != "done") { }
+        }
+
+
+        private static void SaveToFile(ExcelHandler excelHandler, Spreadsheet spreadsheet)
+        {
+            Console.WriteLine("Enter file path to save (e.g., output.csv):");
             string filePath = Console.ReadLine();
             excelHandler.SaveToCsv(filePath, spreadsheet);
         }
