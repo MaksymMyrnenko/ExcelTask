@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using System.Collections.Generic;
 
 namespace ExcelOperations.Library
 {
@@ -13,13 +12,11 @@ namespace ExcelOperations.Library
             var cells = data.DisplayCellsList();
             for (int i = 0; i < cells.Count; i++)
             {
-                var cellId = cells[i];
-                var cell = data.GetCell(cellId);
-                var cellValue = cell.GetValue();
+                string cellId = cells[i];
+                string value = data.EvaluateCell(cellId);
 
-                jsonBuilder.Append($"\"{cellId}\": \"{cellValue}\"");
+                jsonBuilder.Append($"\"{cellId}\": \"{value}\"");
 
-                // Add a comma after each cell except the last one
                 if (i < cells.Count - 1)
                 {
                     jsonBuilder.Append(", ");

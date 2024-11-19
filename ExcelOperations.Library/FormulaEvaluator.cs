@@ -11,7 +11,6 @@ namespace ExcelOperations.Library
         {
             string evaluatedFormula = formula;
 
-            // Replace each cell reference in the formula with its value
             foreach (Match match in cellReferenceRegex.Matches(formula))
             {
                 string cellId = match.Value;
@@ -27,13 +26,11 @@ namespace ExcelOperations.Library
                 }
             }
 
-            // Evaluate the final arithmetic expression
             return EvaluateArithmeticExpression(evaluatedFormula).ToString();
         }
 
         private static float EvaluateArithmeticExpression(string expression)
         {
-            // Simple evaluation logic using DataTable
             var dataTable = new System.Data.DataTable();
             return Convert.ToSingle(dataTable.Compute(expression, ""));
         }

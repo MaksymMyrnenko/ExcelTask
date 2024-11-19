@@ -9,7 +9,6 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
-            // Set up Dependency Injection
             var serviceProvider = new ServiceCollection()
                 .AddSingleton<Spreadsheet>()
                 .AddSingleton<ExcelHandler>()
@@ -25,6 +24,7 @@ namespace ConsoleApp
                 Console.WriteLine("2) Get value from specific cell");
                 Console.WriteLine("3) List all values");
                 Console.WriteLine("4) Save to file");
+                Console.WriteLine("5) Serialize to JSON");
                 Console.WriteLine("Enter the number of your choice (or type 'exit' to quit):");
 
                 string choice = Console.ReadLine();
@@ -46,6 +46,9 @@ namespace ConsoleApp
                         break;
                     case "4":
                         SaveToFile(excelHandler, spreadsheet);
+                        break;
+                    case "5":
+                        SerializeToJson(spreadsheet);
                         break;
                     default:
                         Console.WriteLine("Invalid choice. Please try again.");
@@ -132,7 +135,6 @@ namespace ConsoleApp
 
             foreach (var cellId in spreadsheet.DisplayCellsList())
             {
-                // Evaluate the cell to handle formulas
                 var evaluatedValue = spreadsheet.EvaluateCell(cellId);
                 Console.WriteLine($"Cell {cellId}: {evaluatedValue}");
             }
@@ -141,6 +143,33 @@ namespace ConsoleApp
             while (Console.ReadLine()?.ToLower() != "done") { }
         }
 
+        private static void SerializeToJson(Spreadsheet spreadsheet)
+        {
+            Console.WriteLine("Enter file path to save the JSON (e.g., output.json):");
+            string filePath = Console.ReadLine();
+
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                Console.WriteLine("Invalid file path. Serialization aborted.");
+                return;
+            }
+
+            if (!filePath.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+            {
+                filePath += ".json";
+            }
+
+            try
+            {
+                string json = Serializer.ToJson(spreadsheet);
+                File.WriteAllText(filePath, json);
+                Console.WriteLine($"Data successfully serialized to JSON and saved at {filePath}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while saving to JSON: {ex.Message}");
+            }
+        }
 
         private static void SaveToFile(ExcelHandler excelHandler, Spreadsheet spreadsheet)
         {

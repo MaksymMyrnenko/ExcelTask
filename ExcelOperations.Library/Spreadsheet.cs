@@ -35,18 +35,15 @@ namespace ExcelOperations.Library
             var cell = GetCell(cellId);
             if (cell == null)
             {
-                return null; // Cell does not exist
+                return null; 
             }
 
-            // Check if the cell value is a formula
             if (cell.RawValue.Contains("+") || cell.RawValue.Contains("-") ||
                 cell.RawValue.Contains("*") || cell.RawValue.Contains("/"))
             {
-                // Evaluate the formula
                 return FormulaEvaluator.EvaluateFormula(cell.RawValue, this);
             }
 
-            // Return the raw value for non-formulas
             return cell.RawValue;
         }
 
