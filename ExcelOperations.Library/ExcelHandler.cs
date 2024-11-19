@@ -1,81 +1,32 @@
-﻿using ClosedXML.Excel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using System.IO;
 
 namespace ExcelOperations.Library
 {
     public class ExcelHandler
     {
-        public void CreateExcel(string filePath, Spreadsheet data)
-        {
-            using (var workbook = new XLWorkbook())
-            {
-                var worksheet = workbook.AddWorksheet("Sheet1");
-                foreach (var cell in data.DisplayCellsList())
-                {
-                    var cellData = data.GetCell(cell);
-                    worksheet.Cell(cell).Value = cellData.GetValue();
-                }
-                workbook.SaveAs(filePath);
-            }
-        }
-
-        public void EditExcel(string filePath, Spreadsheet data)
-        {
-            using (var workbook = new XLWorkbook(filePath))
-            {
-                var worksheet = workbook.Worksheet(1);
-                foreach (var cell in data.DisplayCellsList())
-                {
-                    var cellData = data.GetCell(cell);
-                    worksheet.Cell(cell).Value = cellData.GetValue();
-                }
-                workbook.Save();
-            }
-        }
-
-        public Spreadsheet ReadFile(string filePath)
-        {
-            var spreadsheet = new Spreadsheet();
-
-            using (var workbook = new XLWorkbook(filePath))
-            {
-                var worksheet = workbook.Worksheet(1);
-
-                foreach (var cell in worksheet.CellsUsed())
-                {
-                    spreadsheet.SetCell(cell.Address.ToString(), cell.GetValue<string>());
-                }
-            }
-
-            return spreadsheet;
-        }
-
-        public void SaveToExcel(string filePath, Spreadsheet data)
+        public void SaveToCsv(string filePath, Spreadsheet data)
         {
             if (string.IsNullOrWhiteSpace(filePath))
             {
                 throw new ArgumentException("File path cannot be empty.", nameof(filePath));
             }
 
-            if (!filePath.EndsWith(".xlsx", StringComparison.OrdinalIgnoreCase))
+            if (!filePath.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
             {
-                filePath += ".xlsx";
+                filePath += ".csv";
             }
 
-            using (var workbook = new XLWorkbook())
+            using (var writer = new StreamWriter(filePath))
             {
-                var worksheet = workbook.AddWorksheet("Sheet1");
-                foreach (var cell in data.DisplayCellsList())
+                foreach (var cellId in data.DisplayCellsList())
                 {
-                    var cellData = data.GetCell(cell);
-                    worksheet.Cell(cell).Value = cellData.GetValue();
+                    var cellValue = data.EvaluateCell(cellId);
+                    writer.WriteLine($"{cellId},{cellValue}");
                 }
-                workbook.SaveAs(filePath);
             }
+
+            Console.WriteLine($"Spreadsheet saved to {filePath}");
         }
     }
 }

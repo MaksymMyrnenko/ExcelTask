@@ -1,4 +1,8 @@
-﻿namespace ExcelOperations.Library
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ExcelOperations.Library
 {
     public class Spreadsheet
     {
@@ -26,9 +30,16 @@
             return cells.Select(c => c.Id).ToList();
         }
 
-        public string Serialize()
+        public string EvaluateCell(string cellId)
         {
-            return Serializer.ToJson(this);
+            var cell = GetCell(cellId);
+            if (cell == null)
+            {
+                throw new ArgumentException($"Cell {cellId} not found.");
+            }
+
+            // Check if the cell value is a formula
+            return FormulaEvaluator.EvaluateFormula(cell.RawValue, this);
         }
     }
 }

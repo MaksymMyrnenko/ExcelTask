@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ExcelOperations.Library
+﻿namespace ExcelOperations.Library
 {
     public class Cell
     {
@@ -19,18 +13,6 @@ namespace ExcelOperations.Library
         public string GetValue()
         {
             return RawValue;
-        }
-
-        public float EvaluateFormula()
-        {
-            if (float.TryParse(RawValue, out float result))
-            {
-                return result;
-            }
-            else
-            {
-                return 0;
-            }
         }
     }
 }
